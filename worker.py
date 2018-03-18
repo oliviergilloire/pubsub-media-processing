@@ -56,8 +56,8 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     topic_name = "projects/{0}/topics/{1}".format(PROJECT_ID, topic)
  
     # subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
-    subscriber.create_subscription(subscription_id,topic_name)
-    subcription = susbcriber.subscribe(subscription_id)
+    pubsub_client.create_subscription(subscription_id,topic_name)
+    subcription = pubsub_client.subscribe(subscription_id)
 
     if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
