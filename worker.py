@@ -61,7 +61,8 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     print("topic name:", topic_name)
 
     # subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
-    pubsub_client.create_subscription(subscription_id,topic_name)
+    # subscription already exists, created in the console
+    # pubsub_client.create_subscription(subscription_id,topic_name)
     subcription = pubsub_client.subscribe(subscription_id)
 
     if not subscription.exists():
