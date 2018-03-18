@@ -138,7 +138,7 @@ def postpone_ack(params):
     #[END postpone_ack]
 
 """Create the API clients."""
-pubsub_client = pubsub.Client()
+pubsub_client = pubsub.SubscriberClient()
 gcs_client = storage.Client()
 
 """Launch the loop to pull media to process."""
