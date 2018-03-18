@@ -45,6 +45,7 @@ INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 @click.option('--toprocess', default=1,
               help='Number of medias to process on one instance at a time - Not implemented')
 @click.option('--subscription', required=True, help='Name of the subscription to get new messages')
+@click.option('--topic', required=True, help='Name of the topic to get new messages')
 @click.option('--refresh', default=25, help='Acknowledge deadline refresh time')
 @click.option('--dataset_id', default='media_processing', help='Name of the dataset where to save transcript')
 @click.option('--table_id', default='speech', help='Name of the table where to save transcript')
