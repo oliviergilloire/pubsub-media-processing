@@ -63,6 +63,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     # subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
     # subscription already exists, created in the console
     # pubsub_client.create_subscription(subscription_id,topic_name)
+    # unfortunate naming of two variables with the same name... 
     subscription = pubsub_client.subscribe(subscription_id)
 
     """if not subscription.exists():
