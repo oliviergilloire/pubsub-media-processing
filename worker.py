@@ -65,12 +65,12 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     # pubsub_client.create_subscription(subscription_id,topic_name)
     subcription = pubsub_client.subscribe(subscription_id)
 
-    if not subscription.exists():
+    """if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
         return
-
+    
     #r = Recurror(refresh - 10, postpone_ack)
-
+    """ 
 
 
     # Define the callback.
