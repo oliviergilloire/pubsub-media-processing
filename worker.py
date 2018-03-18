@@ -63,7 +63,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     # subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
     # subscription already exists, created in the console
     # pubsub_client.create_subscription(subscription_id,topic_name)
-    subcription = pubsub_client.subscribe(subscription_id)
+    subscription = pubsub_client.subscribe(subscription_id)
 
     """if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
