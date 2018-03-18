@@ -92,11 +92,11 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         Logger.log_writer("{0} process starts".format(object_id))
         start_process = datetime.datetime.now()
 
-    # <Your custom process>
+        # <Your custom process>
         if event_type == 'OBJECT_FINALIZE':
             m = Mediator(bucket_id, object_id, content_type, PROJECT_ID, dataset_id, table_id)
             m.speech_to_text()
-    # <End of your custom process>
+        # <End of your custom process>
 
         end_process = datetime.datetime.now()
         Logger.log_writer("{0} process stops".format(object_id))
@@ -112,8 +112,8 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         )
 
         message.ack()
-
-        # Open the subscription, passing the callback.
+        
+    # Open the subscription, passing the callback.
     future = subscription.open(callback)
     
     
