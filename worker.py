@@ -49,9 +49,12 @@ INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 @click.option('--refresh', default=25, help='Acknowledge deadline refresh time')
 @click.option('--dataset_id', default='media_processing', help='Name of the dataset where to save transcript')
 @click.option('--table_id', default='speech', help='Name of the table where to save transcript')
+
 def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     """
     """
+    # temporary forcing of PROJECT ID to avoid issues with getting metadata for tests
+    PROJECT_ID = "wired-height-198314"
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
     topic_name = "projects/{0}/topics/{1}".format(PROJECT_ID, topic)
     print("subscription id:", subscription_id)
