@@ -57,9 +57,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     PROJECT_ID = "wired-height-198314"
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
     topic_name = "projects/{0}/topics/{1}".format(PROJECT_ID, topic)
-    print("subscription id:", subscription_id)
-    print("topic name:", topic_name)
-
+    
     # subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
     # subscription already exists, created in the console
     # pubsub_client.create_subscription(subscription_id,topic_name)
