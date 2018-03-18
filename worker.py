@@ -49,7 +49,7 @@ INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 @click.option('--refresh', default=25, help='Acknowledge deadline refresh time')
 @click.option('--dataset_id', default='media_processing', help='Name of the dataset where to save transcript')
 @click.option('--table_id', default='speech', help='Name of the table where to save transcript')
-def main(toprocess, subscription, refresh, dataset_id, table_id):
+def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     """
     """
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
