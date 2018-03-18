@@ -52,68 +52,64 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     """
     """
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
-    subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
+    topic_name = "projects/{0}/topics/{1}".format(PROJECT_ID, topic)
+ 
+    # subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
+    subscriber.create_subscription(subscription_id,topic_name)
+    subcription = susbcriber.subscribe(subscription_id)
 
     if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
         return
 
-    r = Recurror(refresh - 10, postpone_ack)
+    #r = Recurror(refresh - 10, postpone_ack)
 
-    # pull() blocks until a message is received
-    while True:
-        #[START sub_pull]
-        resp = subscriptions.pull("maxMessages": toprocess)
-        #[END sub_pull]
 
-        for ack_id, message in resp:
-            # We need to do this to get contentType. The rest is in attributes
-            #[START msg_format]
-            data = message.data
-            msg_string = base64.b64decode(data)
-            msg_data = json.loads(msg_string)
-            content_type = msg_data["contentType"]
 
-            attributes = message.attributes
-            event_type = attributes['eventType']
-            bucket_id = attributes['bucketId']
-            object_id = attributes['objectId']
-            generation = attributes['objectGeneration']
-            #[END msg_format]
+    # Define the callback.
+    # Note that the callback is defined *before* the subscription is opened.
+    def callback(message):
+        # pull() blocks until a message is received
+        data = message.data
+        msg_string = base64.b64decode(data)
+        msg_data = json.loads(msg_string)
+        content_type = msg_data["contentType"]
 
-            # Start refreshing the acknowledge deadline.
-            r.start(ack_ids=[ack_id], refresh=refresh, sub=sub)
+        attributes = message.attributes
+        event_type = attributes['eventType']
+        bucket_id = attributes['bucketId']
+        object_id = attributes['objectId']
+        generation = attributes['objectGeneration']
+        #[END msg_format]
 
-            Logger.log_writer("{0} process starts".format(object_id))
-            start_process = datetime.datetime.now()
+        Logger.log_writer("{0} process starts".format(object_id))
+        start_process = datetime.datetime.now()
 
     # <Your custom process>
-            if event_type == 'OBJECT_FINALIZE':
-                m = Mediator(bucket_id, object_id, content_type, PROJECT_ID, dataset_id, table_id)
-                m.speech_to_text()
+        if event_type == 'OBJECT_FINALIZE':
+            m = Mediator(bucket_id, object_id, content_type, PROJECT_ID, dataset_id, table_id)
+            m.speech_to_text()
     # <End of your custom process>
 
-            end_process = datetime.datetime.now()
-            Logger.log_writer("{0} process stops".format(object_id))
+        end_process = datetime.datetime.now()
+        Logger.log_writer("{0} process stops".format(object_id))
 
-            #[START ack_msg]
-            # Delete the message in the queue by acknowledging it.
-            subscription.acknowledge([ack_id])
-            #[END ack_msg]
-
-            # Write logs only if needed for analytics or debugging
-            Logger.log_writer(
-                "{media_url} processed by instance {instance_hostname} in {amount_time}"
-                .format(
-                    media_url=msg_string,
-                    instance_hostname=INSTANCE_NAME,
-                    amount_time=str(end_process - start_process)
-                )
+        # Write logs only if needed for analytics or debugging
+        Logger.log_writer(
+            "{media_url} processed by instance {instance_hostname} in {amount_time}"
+            .format(
+                media_url=msg_string,
+                instance_hostname=INSTANCE_NAME,
+                amount_time=str(end_process - start_process)
             )
+        )
 
-            # Stop the ackDeadLine refresh until next message.
-            r.stop()
+        message.ack()
 
+        # Open the subscription, passing the callback.
+    future = subscription.open(callback)
+    
+    
 def postpone_ack(params):
     """Postpone the acknowledge deadline until the media is processed
     Will be paused once a message is processed until a new one arrives
