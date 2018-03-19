@@ -70,8 +70,12 @@ class Mediator(object):
         #[END speech_body]
 
         try:
-            speech_request = self.api_client.speech().syncrecognize(body=speech_body)
-            speech_response = speech_request.execute()
+            #speech_request = self.api_client.speech().syncrecognize(body=speech_body)
+            #speech_response = speech_request.execute()
+            #
+            # switching to long running:
+            speech_request = self.api_client.speech().long_running_recognize(body=speech_body)
+            speech_response = speech_request.result()
             chosen = speech_response['results'][0]['alternatives'][0]
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
         except Exception, e:
