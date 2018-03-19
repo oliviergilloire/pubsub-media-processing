@@ -114,6 +114,16 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         
     # Open the subscription, passing the callback.
     future = subscription.open(callback)
+    try:
+        sys.stdout.close()
+    except:
+        pass
+    
+    try:
+        sys.stderr.close()
+    except:
+        pass
+
     
     
 def postpone_ack(params):
