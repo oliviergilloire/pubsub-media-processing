@@ -121,11 +121,11 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     print("waiting for incoming messages, subscription setup: ", subscription)
     future = subscription.open(callback)
 
-    try:
-        future.result()
-    except Exception as ex:
-        subscription.close()
-        raise
+    #try:
+    future.result()
+    #except Exception as ex:
+    #    subscription.close()
+    #    raise
     
     try:
         sys.stdout.close()
