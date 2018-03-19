@@ -66,6 +66,7 @@ class Mediator(object):
                 'uri': "gs://{0}/{1}".format(self.dropzone_bucket, self.filename)
             }
         }
+        print(speech_body)
         #[END speech_body]
 
         try:
@@ -74,12 +75,15 @@ class Mediator(object):
             chosen = speech_response['results'][0]['alternatives'][0]
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
         except Exception, e:
-            Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
+            #Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
+            print("Problem with file {0} with {1}".format(self.filename, str(e)))
             pass
+        print("Successfully written to BQ")
 
     def write_to_bq(self, transcript, confidence):
         """Write to BigQuery"""
-        Logger.log_writer("Writing - {} - to BigQuery".format(transcript))
+        #Logger.log_writer("Writing - {} - to BigQuery".format(transcript))
+        print("Writing - {} - to BigQuery".format(transcript))
         body = {
             "rows":[{
                 "json": {
@@ -88,6 +92,8 @@ class Mediator(object):
                 }
             }]
         }
+        print(body)
+        
 
         response = self.bq_client.tabledata().insertAll(
             projectId=self.project_id,
