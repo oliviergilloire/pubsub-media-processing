@@ -76,7 +76,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         #print("msg_string",msg_string)
         #msg_data = json.loads(msg_string)
         #print("msg_data",msg_data)
-        print("typeof data",typeof(data))
+        print("typeof data",type(data))
         content_type = data["contentType"]
         print("content_type",content_type)
         
