@@ -34,7 +34,8 @@ METADATA_URL_INSTANCE = "http://metadata/computeMetadata/v1/instance/"
 METADTA_FLAVOR = {'Metadata-Flavor' : 'Google'}
 
 # Get the metadata related to the instance using the metadata server
-PROJECT_ID = requests.get(METADATA_URL_PROJECT + 'project-id', headers=METADTA_FLAVOR).text
+# PROJECT_ID = requests.get(METADATA_URL_PROJECT + 'project-id', headers=METADTA_FLAVOR).text
+PROJECT_ID = "wired-height-198314"
 INSTANCE_ID = requests.get(METADATA_URL_INSTANCE + 'id', headers=METADTA_FLAVOR).text
 INSTANCE_NAME = requests.get(METADATA_URL_INSTANCE + 'hostname', headers=METADTA_FLAVOR).text
 INSTANCE_ZONE_URL = requests.get(METADATA_URL_INSTANCE + 'zone', headers=METADTA_FLAVOR).text
@@ -54,7 +55,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     """
     """
     # temporary forcing of PROJECT ID to avoid issues with getting metadata for tests
-    PROJECT_ID = "wired-height-198314"
+    
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
     topic_name = "projects/{0}/topics/{1}".format(PROJECT_ID, topic)
     
@@ -96,7 +97,7 @@ def callback(message):
     content_type = msg_data["contentType"]
 
     attributes = message.attributes
-    print(attributes)
+    print("attributes: ", attributes)
     event_type = attributes['eventType']
     bucket_id = attributes['bucketId']
     object_id = attributes['objectId']
@@ -107,8 +108,11 @@ def callback(message):
     start_process = datetime.datetime.now()
 
     # <Your custom process>
+    print("checking event_type: ", event_type)
     if event_type == 'OBJECT_FINALIZE':
+        print("Instantiating Mediator")
         m = Mediator(bucket_id, object_id, content_type, PROJECT_ID, dataset_id, table_id)
+        print("Calling Speech to text")
         m.speech_to_text()
     # <End of your custom process>
 
