@@ -20,6 +20,7 @@ import logging
 from googleapiclient.discovery import build
 from googleapiclient import http
 from oauth2client.client import GoogleCredentials
+from google.cloud import speech
 
 from logger import Logger
 
@@ -54,7 +55,7 @@ class Mediator(object):
     def speech_to_text(self):
         """Builds a Speech API request for files in GCS and writes the response
            transcript and confidence to BigQuery for further analysis."""
-
+        client = speech.SpeechClient()
         #[START speech_body]
         speech_body={
             'config': {
@@ -74,7 +75,16 @@ class Mediator(object):
             #speech_response = speech_request.execute()
             #
             # switching to long running:
-            speech_request = self.api_client.speech().long_running_recognize(body=speech_body)
+            speech_request = client.long_running_recognize(
+                audio=speech.types.RecognitionAudio(
+                    uri="gs://{0}/{1}".format(self.dropzone_bucket, self.filename
+                ),
+                config=speech.types.RecognitionConfig(
+                    encoding='FLAC',
+                    sampleRate=16000,
+                    languageCode=self.filename.split('_')[0]
+                    ),
+                )
             speech_response = speech_request.result()
             chosen = speech_response['results'][0]['alternatives'][0]
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
