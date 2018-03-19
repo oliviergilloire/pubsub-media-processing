@@ -96,6 +96,7 @@ def callback(message):
     content_type = msg_data["contentType"]
 
     attributes = message.attributes
+    print(attributes)
     event_type = attributes['eventType']
     bucket_id = attributes['bucketId']
     object_id = attributes['objectId']
