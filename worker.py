@@ -81,7 +81,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         print("content_type",content_type)
         
         attributes = message.attributes
-        print("attributes type: ", typeof(attributes))
+        print("attributes type: ", type(attributes))
         event_type = attributes['eventType']
         bucket_id = attributes['bucketId']
         object_id = attributes['objectId']
