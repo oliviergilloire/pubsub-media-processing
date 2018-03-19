@@ -74,10 +74,9 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         print(data)
         #msg_string = base64.b64decode(data)
         #print("msg_string",msg_string)
-        #msg_data = json.loads(msg_string)
+        msg_data = json.loads(data)
         #print("msg_data",msg_data)
-        print("typeof data",type(data))
-        content_type = data["contentType"]
+        content_type = msg_data["contentType"]
         print("content_type",content_type)
         
         attributes = message.attributes
