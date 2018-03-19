@@ -80,7 +80,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         print("content_type",content_type)
         
         attributes = message.attributes
-        print("attributes: ", attributes)
+        #print("attributes: ", attributes)
         event_type = attributes['eventType']
         bucket_id = attributes['bucketId']
         object_id = attributes['objectId']
@@ -103,10 +103,10 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         print("{0} process stops".format(object_id))
 
         # Write logs only if needed for analytics or debugging
-        Logger.log_writer(
+        print(
             "{media_url} processed by instance {instance_hostname} in {amount_time}"
             .format(
-                media_url=msg_string,
+                media_url=data,
                 instance_hostname=INSTANCE_NAME,
                 amount_time=str(end_process - start_process)
             )
