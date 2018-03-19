@@ -121,32 +121,6 @@ def callback(message):
 
     message.ack()    
     
-def postpone_ack(params):
-    """Postpone the acknowledge deadline until the media is processed
-    Will be paused once a message is processed until a new one arrives
-    Args:
-        ack_ids: List of the message ids in the queue
-    Returns:
-        None
-    Raises:
-        None
-    """
-    ack_ids = params['ack_ids']
-    refresh = params['refresh']
-    sub = params['sub']
-    Logger.log_writer(','.join(ack_ids) + ' postponed')
-
-    #[START postpone_ack]
-    #Increment the ackDeadLine to make sure that file has time to be processed
-    pubsub_client.projects().subscriptions().modifyAckDeadline(
-        subscription=sub,
-        body={
-            'ackIds': ack_ids,
-            'ackDeadlineSeconds': refresh
-        }
-    ).execute()
-    #[END postpone_ack]
-
 """Create the API clients."""
 pubsub_client = pubsub.SubscriberClient()
 gcs_client = storage.Client()
