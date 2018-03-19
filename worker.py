@@ -87,7 +87,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         generation = attributes['objectGeneration']
         #[END msg_format]
 
-        Logger.log_writer("{0} process starts".format(object_id))
+        print("{0} process starts".format(object_id))
         start_process = datetime.datetime.now()
 
         # <Your custom process>
@@ -100,7 +100,7 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
         # <End of your custom process>
 
         end_process = datetime.datetime.now()
-        Logger.log_writer("{0} process stops".format(object_id))
+        print("{0} process stops".format(object_id))
 
         # Write logs only if needed for analytics or debugging
         Logger.log_writer(
