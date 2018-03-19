@@ -63,57 +63,12 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     # pubsub_client.create_subscription(subscription_id,topic_name)
     # unfortunate naming of two variables with the same name... 
     subscription = pubsub_client.subscribe(subscription_id)
-
-    """if not subscription.exists():
-        sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
-        return
     
-    #r = Recurror(refresh - 10, postpone_ack)
-    """ 
-
-
-    # Define the callback.
-    # Note that the callback is defined *before* the subscription is opened.
-    def callback(message):
-        # pull() blocks until a message is received
-        data = message.data
-        msg_string = base64.b64decode(data)
-        msg_data = json.loads(msg_string)
-        content_type = msg_data["contentType"]
-
-        attributes = message.attributes
-        event_type = attributes['eventType']
-        bucket_id = attributes['bucketId']
-        object_id = attributes['objectId']
-        generation = attributes['objectGeneration']
-        #[END msg_format]
-
-        Logger.log_writer("{0} process starts".format(object_id))
-        start_process = datetime.datetime.now()
-
-        # <Your custom process>
-        if event_type == 'OBJECT_FINALIZE':
-            m = Mediator(bucket_id, object_id, content_type, PROJECT_ID, dataset_id, table_id)
-            m.speech_to_text()
-        # <End of your custom process>
-
-        end_process = datetime.datetime.now()
-        Logger.log_writer("{0} process stops".format(object_id))
-
-        # Write logs only if needed for analytics or debugging
-        Logger.log_writer(
-            "{media_url} processed by instance {instance_hostname} in {amount_time}"
-            .format(
-                media_url=msg_string,
-                instance_hostname=INSTANCE_NAME,
-                amount_time=str(end_process - start_process)
-            )
-        )
-
-        message.ack()
-        
     # Open the subscription, passing the callback.
+    print("waiting for incoming messages, subscription setup: ", subscription)
     future = subscription.open(callback)
+    
+    
     try:
         sys.stdout.close()
     except:
@@ -124,7 +79,47 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     except:
         pass
 
-    
+# Define the callback.
+# Note that the callback is defined *before* the subscription is opened.
+def callback(message):
+    # pull() blocks until a message is received      
+    print("in callback")
+    data = message.data
+    print(data)
+    msg_string = base64.b64decode(data)
+    msg_data = json.loads(msg_string)
+    content_type = msg_data["contentType"]
+
+    attributes = message.attributes
+    event_type = attributes['eventType']
+    bucket_id = attributes['bucketId']
+    object_id = attributes['objectId']
+    generation = attributes['objectGeneration']
+    #[END msg_format]
+
+    Logger.log_writer("{0} process starts".format(object_id))
+    start_process = datetime.datetime.now()
+
+    # <Your custom process>
+    if event_type == 'OBJECT_FINALIZE':
+        m = Mediator(bucket_id, object_id, content_type, PROJECT_ID, dataset_id, table_id)
+        m.speech_to_text()
+    # <End of your custom process>
+
+    end_process = datetime.datetime.now()
+    Logger.log_writer("{0} process stops".format(object_id))
+
+    # Write logs only if needed for analytics or debugging
+    Logger.log_writer(
+        "{media_url} processed by instance {instance_hostname} in {amount_time}"
+        .format(
+            media_url=msg_string,
+            instance_hostname=INSTANCE_NAME,
+            amount_time=str(end_process - start_process)
+        )
+    )
+
+    message.ack()    
     
 def postpone_ack(params):
     """Postpone the acknowledge deadline until the media is processed
