@@ -67,8 +67,12 @@ def main(toprocess, subscription, topic, refresh, dataset_id, table_id):
     # Open the subscription, passing the callback.
     print("waiting for incoming messages, subscription setup: ", subscription)
     future = subscription.open(callback)
-    future.result()
-
+    
+    try:
+        future.result()
+    except Exception as ex:
+        subscription.close()
+        raise
     
     try:
         sys.stdout.close()
