@@ -77,7 +77,7 @@ class Mediator(object):
             # switching to long running:
             speech_request = client.long_running_recognize(
                 audio=speech.types.RecognitionAudio(
-                    uri="gs://{0}/{1}".format(self.dropzone_bucket, self.filename
+                    uri="gs://{0}/{1}".format(self.dropzone_bucket, self.filename)
                 ),
                 config=speech.types.RecognitionConfig(
                     encoding='FLAC',
