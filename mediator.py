@@ -83,10 +83,10 @@ class Mediator(object):
                     encoding='FLAC',
                     sampleRate=16000,
                     languageCode=self.filename.split('_')[0]
-                    ),
+                    )
                 )
-            speech_response = speech_request.result()
-            chosen = speech_response['results'][0]['alternatives'][0]
+            operation = speech_request.result()
+            chosen = operation['results'][0]['alternatives'][0]
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
         except Exception, e:
             #Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
