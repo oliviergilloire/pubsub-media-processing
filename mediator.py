@@ -95,7 +95,14 @@ class Mediator(object):
             speech_request.add_done_callback(callback)
             """
             # timeout of 10 mins instead :(
-            speech_request.result(timeout=600)
+            result = speech_request.result(timeout=600)
+            print ("result:")
+            print (result)
+            
+            chosen = result['results'][0]['alternatives'][0]
+            print("chosen:")
+            print(chosen)            
+            
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
             print("Successfully written to BQ")
 
