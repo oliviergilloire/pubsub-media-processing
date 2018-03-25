@@ -74,26 +74,24 @@ class Mediator(object):
                 )
             
             operation = speech_request.result()
-            retry_count = 100
+                     
+            def callback(operation_future):
+                # Handle result.
+                print ("result:")
+                print (operation)
             
-            while retry_count > 0 and not operation.done:
-                retry_count -= 1
-                print("retry count:", retry_count)
-                time.sleep(2)
+                chosen = operation['results'][0]['alternatives'][0]
+                print("chosen:")
+                print(chosen)
+            
+                self.write_to_bq(chosen['transcript'], chosen['confidence'])
+                print("Successfully written to BQ")
 
-            if not operation.done:
-                print('Operation not complete and retry limit reached.')
-                return
             
-            print ("result:")
-            print (operation)
+            result = operation_future.result()
+            response.add_done_callback(callback)
+          
             
-            chosen = operation['results'][0]['alternatives'][0]
-            print("chosen:")
-            print(chosen)
-            
-            self.write_to_bq(chosen['transcript'], chosen['confidence'])
-            print("Successfully written to BQ")
         except Exception, e:
             #Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
             print("Problem with file {0} with {1}".format(self.filename, str(e)))
