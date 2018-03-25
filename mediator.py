@@ -96,7 +96,9 @@ class Mediator(object):
             """
             # timeout of 10 mins instead :(
             speech_request.result(timeout=600)
-            
+            self.write_to_bq(chosen['transcript'], chosen['confidence'])
+            print("Successfully written to BQ")
+
         except Exception, e:
             #Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
             print("Problem with file {0} with {1}".format(self.filename, str(e)))
