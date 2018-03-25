@@ -68,15 +68,10 @@ class Mediator(object):
                 ),
                 config=speech.types.RecognitionConfig(
                     encoding='FLAC',
-                    sampleRate=16000,
-                    languageCode=self.filename.split('_')[0]
+                    sample_rate_hertz=44100,
+                    language_code=self.filename.split('_')[0]
                     )
                 )
-            print("calling long_running_recognize with uri =" ,"gs://{0}/{1}".format(self.dropzone_bucket, self.filename), " recognition config = ",speech.types.RecognitionConfig(
-                    encoding='FLAC',
-                    sampleRate=16000,
-                    languageCode=self.filename.split('_')[0]
-                    ) )
             
             operation = speech_request.result()
             chosen = operation['results'][0]['alternatives'][0]
