@@ -74,7 +74,11 @@ class Mediator(object):
                 )
             
             operation = speech_request.result()
+            print ("result:", operation)
+            
             chosen = operation['results'][0]['alternatives'][0]
+            print("chosen:", chosen)
+            
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
             print("Successfully written to BQ")
         except Exception, e:
