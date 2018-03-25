@@ -74,7 +74,9 @@ class Mediator(object):
                 )
             
             
-                     
+            """
+            this isn't thread safe so commenting out for the time being
+            
             def callback(operation_future):
                 # Handle result.
                 result = operation_future.result()
@@ -91,7 +93,9 @@ class Mediator(object):
             
             
             speech_request.add_done_callback(callback)
-          
+            """
+            # timeout of 10 mins instead :(
+            speech_request.result(timeout=600)
             
         except Exception, e:
             #Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
