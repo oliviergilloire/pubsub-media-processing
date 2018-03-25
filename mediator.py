@@ -76,12 +76,12 @@ class Mediator(object):
             operation = speech_request.result()
             retry_count = 100
             
-            while retry_count > 0 and not operation.done():
+            while retry_count > 0 and not operation.done:
                 retry_count -= 1
                 print("retry count:", retry_count)
                 time.sleep(2)
 
-            if not operation.done():
+            if not operation.done:
                 print('Operation not complete and retry limit reached.')
                 return
             
