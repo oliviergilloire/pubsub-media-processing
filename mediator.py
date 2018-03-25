@@ -99,11 +99,17 @@ class Mediator(object):
             print ("result:")
             print (result)
             
-            chosen = result['results'][0]['alternatives'][0]
-            print("chosen:")
-            print(chosen)            
+            stt_result = ""
+            avg_confidence = sum(result.alternatives.confidence)/len(result.alternatives.confidence)
+            # concatenate transcripts into a complete
+            for result in op_result.results:
+                 for alternative in result.alternatives:
+                    stt_result = stt_result + alternative.transcript
+                    
+                    print(alternative.confidence)
+
             
-            self.write_to_bq(chosen['transcript'], chosen['confidence'])
+            self.write_to_bq(stt_result, chosen['confidence'])
             print("Successfully written to BQ")
 
         except Exception, e:
