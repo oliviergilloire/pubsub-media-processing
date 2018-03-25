@@ -67,7 +67,7 @@ class Mediator(object):
                     uri="gs://{0}/{1}".format(self.dropzone_bucket, self.filename)
                 ),
                 config=speech.types.RecognitionConfig(
-                    encoding=self.filename.split('.')[1].upper(),
+                    encoding='LINEAR16',
                     #sample_rate_hertz=16000,
                     language_code=self.filename.split('_')[0]
                     )
