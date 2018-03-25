@@ -68,7 +68,7 @@ class Mediator(object):
                 ),
                 config=speech.types.RecognitionConfig(
                     encoding='FLAC',
-                    sample_rate_hertz=44100,
+                    sample_rate_hertz=16000,
                     language_code=self.filename.split('_')[0]
                     )
                 )
