@@ -95,9 +95,9 @@ class Mediator(object):
             speech_request.add_done_callback(callback)
             """
             # timeout of 10 mins instead :(
-            result = speech_request.result(timeout=600)
+            op_result = speech_request.result(timeout=600)
             print ("result:")
-            print (result)
+            print (op_result)
             
             stt_result = ""
             avg_confidence = sum(result.alternatives.confidence)/len(result.alternatives.confidence)
