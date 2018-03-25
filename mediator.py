@@ -78,16 +78,19 @@ class Mediator(object):
             
             while retry_count > 0 and not operation.done():
                 retry_count -= 1
+                print("retry count:", retry_count)
                 time.sleep(2)
 
             if not operation.done():
                 print('Operation not complete and retry limit reached.')
                 return
             
-            print ("result:", operation)
+            print ("result:")
+            print (operation)
             
             chosen = operation['results'][0]['alternatives'][0]
-            print("chosen:", chosen)
+            print("chosen:")
+            print(chosen)
             
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
             print("Successfully written to BQ")
