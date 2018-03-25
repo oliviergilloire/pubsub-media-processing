@@ -73,14 +73,15 @@ class Mediator(object):
                     )
                 )
             
-            operation = speech_request.result()
+            
                      
             def callback(operation_future):
                 # Handle result.
+                result = operation_future.result()
                 print ("result:")
-                print (operation)
+                print (result)
             
-                chosen = operation['results'][0]['alternatives'][0]
+                chosen = result['results'][0]['alternatives'][0]
                 print("chosen:")
                 print(chosen)
             
@@ -88,8 +89,8 @@ class Mediator(object):
                 print("Successfully written to BQ")
 
             
-            result = operation_future.result()
-            response.add_done_callback(callback)
+            
+            operation.add_done_callback(callback)
           
             
         except Exception, e:
