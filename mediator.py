@@ -90,7 +90,7 @@ class Mediator(object):
 
             
             
-            operation.add_done_callback(callback)
+            speech_request.add_done_callback(callback)
           
             
         except Exception, e:
