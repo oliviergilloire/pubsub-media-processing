@@ -56,20 +56,7 @@ class Mediator(object):
         """Builds a Speech API request for files in GCS and writes the response
            transcript and confidence to BigQuery for further analysis."""
         client = speech.SpeechClient()
-        #[START speech_body]
-        speech_body={
-            'config': {
-                'encoding': 'FLAC',
-                'sampleRate': 16000,
-                'languageCode': self.filename.split('_')[0]
-            },
-            'audio': {
-                'uri': "gs://{0}/{1}".format(self.dropzone_bucket, self.filename)
-            }
-        }
-        print(speech_body)
-        #[END speech_body]
-
+        
         try:
             #speech_request = self.api_client.speech().syncrecognize(body=speech_body)
             #speech_response = speech_request.execute()
@@ -85,14 +72,21 @@ class Mediator(object):
                     languageCode=self.filename.split('_')[0]
                     )
                 )
+            print("calling long_running_recognize with uri =" ,"gs://{0}/{1}".format(self.dropzone_bucket, self.filename), " recognition config = ",speech.types.RecognitionConfig(
+                    encoding='FLAC',
+                    sampleRate=16000,
+                    languageCode=self.filename.split('_')[0]
+                    ) )
+            
             operation = speech_request.result()
             chosen = operation['results'][0]['alternatives'][0]
             self.write_to_bq(chosen['transcript'], chosen['confidence'])
+            print("Successfully written to BQ")
         except Exception, e:
             #Logger.log_writer("Problem with file {0} with {1}".format(self.filename, str(e)))
             print("Problem with file {0} with {1}".format(self.filename, str(e)))
             pass
-        print("Successfully written to BQ")
+        
 
     def write_to_bq(self, transcript, confidence):
         """Write to BigQuery"""
